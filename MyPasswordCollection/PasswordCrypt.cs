@@ -17,16 +17,19 @@ namespace MyPasswordCollection
         private byte[] _key;
         private byte[] _iv;
 
-        public PasswordCrypt(string password)
+        public string FilePath { get; private set; }
+
+        public PasswordCrypt(string path, string password)
         {
             GetKeyAndIVFromPassword(password, ref _key, ref _iv);
+            FilePath = path;
         }
 
-        public void Save(string path, IEnumerable<PasswordItem> items)
+        public void Save(IEnumerable<PasswordItem> items)
         {
-            using (FileStream fs = new FileStream(path, FileMode.Create))
+            using (FileStream fs = new FileStream(FilePath, FileMode.Create))
             {
-                if (string.IsNullOrEmpty(path))
+                if (string.IsNullOrEmpty(FilePath))
                     throw new ArgumentException("path");
 
                 fs.Write(BitConverter.GetBytes(HEADER), 0, 4);
@@ -42,9 +45,14 @@ namespace MyPasswordCollection
             }
         }
 
-        public IList<PasswordItem> LoadAndDecrypt(string path)
+        public IList<PasswordItem> LoadOrCreate()
         {
-            var ebytes = File.ReadAllBytes(path);
+            if (!File.Exists(FilePath))
+            {
+                this.Save(new PasswordItem[0]);
+            }
+
+            var ebytes = File.ReadAllBytes(FilePath);
 
             if (BitConverter.ToInt32(TakeRange(ebytes, 0, 4), 0) != HEADER)
                 throw new InvalidDataException("Неверный файл или файл поврежден");
@@ -57,12 +65,12 @@ namespace MyPasswordCollection
             for (int i = 0; i < dbytes.Length; )
             {
                 int siteLen = BitConverter.ToInt32(TakeRange(dbytes, i, 4), 0);
-                int logLen = BitConverter.ToInt32(TakeRange(dbytes, i+=4, 4), 0);
-                int pasLen = BitConverter.ToInt32(TakeRange(dbytes, i+=4, 4), 0);
+                int logLen = BitConverter.ToInt32(TakeRange(dbytes, i += 4, 4), 0);
+                int pasLen = BitConverter.ToInt32(TakeRange(dbytes, i += 4, 4), 0);
 
-                string site = Encoding.Unicode.GetString(TakeRange(dbytes, i+=4, siteLen));
-                string login = Encoding.Unicode.GetString(TakeRange(dbytes, i+=siteLen, logLen));
-                string pas = Encoding.Unicode.GetString(TakeRange(dbytes, i+= logLen, pasLen));
+                string site = Encoding.Unicode.GetString(TakeRange(dbytes, i += 4, siteLen));
+                string login = Encoding.Unicode.GetString(TakeRange(dbytes, i += siteLen, logLen));
+                string pas = Encoding.Unicode.GetString(TakeRange(dbytes, i += logLen, pasLen));
 
                 list.Add(new PasswordItem(site, login, pas));
 

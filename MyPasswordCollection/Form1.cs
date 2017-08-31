@@ -16,6 +16,8 @@ namespace MyPasswordCollection
 
         private BindingList<PasswordItem> _passwords;
 
+        private PasswordCrypt _crypter;
+
         private bool UIEnabled
         {
             set
@@ -48,20 +50,32 @@ namespace MyPasswordCollection
             }
         }
 
-        private PasswordCrypt _crypter;
-
+        private PasswordCrypt Crypter
+        {
+            get
+            {
+                return _crypter;
+            }
+            set
+            {
+                accauntInfo1.Item = new PasswordItem();
+                _crypter = value;
+                if (_crypter == null)
+                {
+                    UIEnabled = false;
+                }
+                else
+                {
+                    UIEnabled = true;
+                    PasswordList = new BindingList<PasswordItem>(value.LoadOrCreate());
+                }
+            }
+        }
 
         public Form1()
         {
             InitializeComponent();
             UIEnabled = false;
-        }
-
-        private void LoadPasswords(string path, string password)
-        {
-            _crypter = new PasswordCrypt(password);
-            var ps = _crypter.LoadAndDecrypt(path);
-            PasswordList = new BindingList<PasswordItem>(ps);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -99,34 +113,7 @@ namespace MyPasswordCollection
             var defaultPath = Path.Combine(Application.StartupPath, "passwords.m");
             if (File.Exists(defaultPath))
             {
-                using (InputPasswordForm form = new InputPasswordForm())
-                {
-                    form.StartPosition = FormStartPosition.CenterParent;
-                    bool repeatflag = true;
-                    while (repeatflag)
-                    {
-                        form.ShowDialog();
-                        if (form.DialogResult == System.Windows.Forms.DialogResult.OK)
-                        {
-                            try
-                            {
-                                LoadPasswords(defaultPath, form.Result);
-                                repeatflag = false;
-                            }
-                            catch (Exception ex)
-                            {
-                                var dr = MessageBox.Show("Decryption failed. Try again?", ex.GetType().Name, MessageBoxButtons.YesNo);
-                                if (dr == System.Windows.Forms.DialogResult.No)
-                                    repeatflag = false;
-                            }
-
-                        }
-                        else
-                        {
-                            repeatflag = false;
-                        }
-                    }
-                }
+                InitCrypter(defaultPath);
             }
         }
 
@@ -140,16 +127,7 @@ namespace MyPasswordCollection
             saveFileDialog.Filter = "MyPasswordCollection files (*.m)|*.m";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                using (InputPasswordForm pasform = new InputPasswordForm())
-                {
-                    var res = pasform.ShowDialog();
-                    if (res == System.Windows.Forms.DialogResult.OK)
-                    {
-                        _crypter = new PasswordCrypt(pasform.Result);
-                        PasswordList = new BindingList<PasswordItem>();      
-                        _crypter.Save(saveFileDialog.FileName, PasswordList);
-                    }
-                }
+                InitCrypter(saveFileDialog.FileName);
             }
         }
 
@@ -158,13 +136,36 @@ namespace MyPasswordCollection
             openFileDialog.Filter = "MyPasswordCollection files (*.m)|*.m";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                using (InputPasswordForm pasform = new InputPasswordForm())
+                InitCrypter(openFileDialog.FileName);
+            }
+        }
+
+        private void InitCrypter(string path)
+        {
+            using (InputPasswordForm pasform = new InputPasswordForm())
+            {
+                bool repeatflag = true;
+                while (repeatflag)
                 {
-                    var res = pasform.ShowDialog();
-                    if (res == System.Windows.Forms.DialogResult.OK)
+                    pasform.ShowDialog();
+                    if (pasform.DialogResult == System.Windows.Forms.DialogResult.OK)
                     {
-                        _crypter = new PasswordCrypt(pasform.Result);
-                        PasswordList = new BindingList<PasswordItem>(_crypter.LoadAndDecrypt(openFileDialog.FileName));
+                        try
+                        {
+                            Crypter = new PasswordCrypt(path, pasform.Result);
+                            repeatflag = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            var dr = MessageBox.Show("Decryption failed. Try again?", ex.GetType().Name, MessageBoxButtons.YesNo);
+                            if (dr == System.Windows.Forms.DialogResult.No)
+                                repeatflag = false;
+                        }
+
+                    }
+                    else
+                    {
+                        repeatflag = false;
                     }
                 }
             }

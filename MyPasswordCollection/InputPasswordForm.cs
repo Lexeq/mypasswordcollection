@@ -16,6 +16,7 @@ namespace MyPasswordCollection
         public InputPasswordForm()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterParent;
         }
 
         private void cbShowPassword_CheckedChanged(object sender, EventArgs e)

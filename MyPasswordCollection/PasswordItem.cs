@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace MyPasswordCollection
 {
@@ -14,11 +15,10 @@ namespace MyPasswordCollection
             Login = login;
             Password = password;
         }
-        public string Site { get;  set; }
+        public string Site { get; private set; }
 
-        public string Login { get;  set; }
+        public string Login { get; private set; }
 
-        public string Password { get; set; }
-
+        public string Password { get; private set; }
     }
 }

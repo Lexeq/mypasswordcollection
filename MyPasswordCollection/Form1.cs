@@ -34,14 +34,21 @@ namespace MyPasswordCollection
         private BindingList<PasswordItem> PasswordList
         {
             get { return _passwords; }
+
             set
             {
-                if (value != null)
+                if (_passwords != null)
+                    _passwords.ListChanged -= _passwords_ListChanged;
+
+                _passwords = value;
+
+                if (_passwords != null)
                 {
-                    _passwords = value;
                     listBox1.DataSource = value;
                     listBox1.DisplayMember = "Site";
+
                     UIEnabled = true;
+                    _passwords.ListChanged += _passwords_ListChanged;
                 }
                 else
                 {
@@ -76,36 +83,7 @@ namespace MyPasswordCollection
         {
             InitializeComponent();
             UIEnabled = false;
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            accauntInfo1.Item = new PasswordItem();
-            accauntInfo1.EditMode = true;
-            listBox1.SelectedIndex = -1;
-        }
-
-        private void accauntInfo1_Edited(object sender, EventArgs e)
-        {
-
-            if (listBox1.SelectedIndex >= 0)
-            {
-                PasswordList.RemoveAt(listBox1.SelectedIndex);
-            }
-            PasswordList.Add((sender as AccauntInfo).Item);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string password = "supapasss";
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBox1.SelectedIndex >= 0)
-                accauntInfo1.Item = PasswordList[listBox1.SelectedIndex];
-            else
-                accauntInfo1.Item = new PasswordItem();
+            accauntInfo1.Edited += new EventHandler(accauntInfo1_Edited);
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -114,6 +92,49 @@ namespace MyPasswordCollection
             if (File.Exists(defaultPath))
             {
                 InitCrypter(defaultPath);
+            }
+        }
+
+        void _passwords_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            Crypter.Save((BindingList<PasswordItem>)sender);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            listBox1.SelectedIndex = -1;
+            accauntInfo1.EditMode = true;
+            accauntInfo1.Enabled = true;
+        }
+
+        private void accauntInfo1_Edited(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex >= 0)
+            {
+                PasswordList[listBox1.SelectedIndex] = accauntInfo1.Item;
+            }
+            else
+            {
+                PasswordList.Add(accauntInfo1.Item);
+                listBox1.SelectedIndex = PasswordList.Count - 1;
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PasswordList != null)
+            {
+                accauntInfo1.Enabled = PasswordList.Count != 0;
+                if (listBox1.SelectedIndex >= 0)
+                {
+                    accauntInfo1.EditMode = false;
+                    accauntInfo1.Item = PasswordList[listBox1.SelectedIndex];
+                }
+                else
+                {
+                    accauntInfo1.Item = new PasswordItem();
+                    accauntInfo1.Enabled = false;
+                }
             }
         }
 
@@ -161,7 +182,6 @@ namespace MyPasswordCollection
                             if (dr == System.Windows.Forms.DialogResult.No)
                                 repeatflag = false;
                         }
-
                     }
                     else
                     {
@@ -169,6 +189,34 @@ namespace MyPasswordCollection
                     }
                 }
             }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex >= 0)
+            {
+                var res = MessageBox.Show("Delete password for " + PasswordList[listBox1.SelectedIndex].Site, "Are you shure?", MessageBoxButtons.YesNo);
+                if (res == System.Windows.Forms.DialogResult.OK)
+                {
+                    PasswordList.RemoveAt(listBox1.SelectedIndex);
+                    listBox1.SelectedIndex = -1;
+                }
+            }
+        }
+
+        private void deletePasswordCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var res = MessageBox.Show("Do you really want to delete all password?", "Are you sure?", MessageBoxButtons.YesNo);
+            if (res == System.Windows.Forms.DialogResult.Yes)
+            {
+                if (PasswordList != null)
+                    PasswordList.Clear();
+            }
+        }
+
+        private void changeMatserPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

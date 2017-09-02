@@ -24,7 +24,6 @@ namespace MyPasswordCollection
                 tbSite.Text = value.Site;
                 tbLogin.Text = value.Login;
                 tbPassword.Text = value.Password;
-                EditMode = false;
             }
         }
 
@@ -67,7 +66,6 @@ namespace MyPasswordCollection
                 tb.SelectAll();
         }
 
-
         private void btnEdit_Click(object sender, EventArgs e)
         {
             EditMode = true;
@@ -86,10 +84,7 @@ namespace MyPasswordCollection
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var item = Item;
-            item.Site = tbSite.Text;
-            item.Login = tbLogin.Text;
-            item.Password = tbPassword.Text;
+            var item = new PasswordItem(tbSite.Text, tbLogin.Text,tbPassword.Text);
             Item = item;
             EditMode = false;
             if (Edited != null) Edited(this, EventArgs.Empty);

@@ -83,10 +83,13 @@
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.tbInput);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.KeyPreview = true;
             this.Name = "InputPasswordForm";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Введите пароль";
             this.Shown += new System.EventHandler(this.InputPasswordForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.InputPasswordForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

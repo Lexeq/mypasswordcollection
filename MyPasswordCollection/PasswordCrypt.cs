@@ -50,6 +50,7 @@ namespace MyPasswordCollection
             if (!File.Exists(FilePath))
             {
                 this.Save(new PasswordItem[0]);
+                return new List<PasswordItem>();
             }
 
             var ebytes = File.ReadAllBytes(FilePath);

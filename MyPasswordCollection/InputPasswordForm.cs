@@ -42,5 +42,19 @@ namespace MyPasswordCollection
             tbInput.Focus();
             tbInput.SelectAll();
         }
+
+        private void InputPasswordForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                this.btnOk_Click(this, EventArgs.Empty);
+            else if (e.KeyCode == Keys.Escape)
+                this.btnCancel_Click(this, EventArgs.Empty);
+            else if (e.Control == true && e.KeyCode == Keys.A)
+            {
+                tbInput.SelectAll();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
     }
 }

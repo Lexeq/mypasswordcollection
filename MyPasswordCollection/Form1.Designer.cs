@@ -104,12 +104,14 @@
             this.changeMatserPasswordToolStripMenuItem.Name = "changeMatserPasswordToolStripMenuItem";
             this.changeMatserPasswordToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.changeMatserPasswordToolStripMenuItem.Text = "Change matser password...";
+            this.changeMatserPasswordToolStripMenuItem.Click += new System.EventHandler(this.changeMatserPasswordToolStripMenuItem_Click);
             // 
             // deletePasswordCollectionToolStripMenuItem
             // 
             this.deletePasswordCollectionToolStripMenuItem.Name = "deletePasswordCollectionToolStripMenuItem";
             this.deletePasswordCollectionToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.deletePasswordCollectionToolStripMenuItem.Text = "Delete password collection";
+            this.deletePasswordCollectionToolStripMenuItem.Click += new System.EventHandler(this.deletePasswordCollectionToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -152,6 +154,7 @@
             this.btnRemove.TabIndex = 4;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // saveFileDialog
             // 
@@ -168,7 +171,6 @@
             this.accauntInfo1.Name = "accauntInfo1";
             this.accauntInfo1.Size = new System.Drawing.Size(308, 130);
             this.accauntInfo1.TabIndex = 2;
-            this.accauntInfo1.Edited += new System.EventHandler(this.accauntInfo1_Edited);
             // 
             // Form1
             // 

@@ -48,7 +48,9 @@ namespace MyPasswordCollection
             }
         }
 
-        public event EventHandler Edited;
+        public event EventHandler EditCompleted;
+
+        public event EventHandler EditCanceled;
 
         public AccauntInfo()
         {
@@ -80,6 +82,7 @@ namespace MyPasswordCollection
         {
             Item = Item;
             EditMode = false;
+            OnEditCanceled(EventArgs.Empty);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -87,7 +90,7 @@ namespace MyPasswordCollection
             var item = new PasswordItem(tbSite.Text, tbLogin.Text,tbPassword.Text);
             Item = item;
             EditMode = false;
-            if (Edited != null) Edited(this, EventArgs.Empty);
+            OnEditComleted(EventArgs.Empty);
         }
 
         private void btnSiteToClipboard_Click(object sender, EventArgs e)
@@ -108,5 +111,18 @@ namespace MyPasswordCollection
                 Clipboard.SetText(tbPassword.Text);
         }
 
+        private void OnEditCanceled(EventArgs e)
+        {
+            var ev = EditCanceled;
+            if (ev != null)
+                ev(this, e);
+        }
+
+        private void OnEditComleted(EventArgs e)
+        {
+            var ev = EditCompleted;
+            if (ev != null)
+                ev(this, e);
+        }
     }
 }

@@ -44,6 +44,7 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.accauntInfo1 = new MyPasswordCollection.AccauntInfo();
+            this.deleteAllPasswordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +95,7 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changeMatserPasswordToolStripMenuItem,
+            this.deleteAllPasswordsToolStripMenuItem,
             this.deletePasswordCollectionToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -172,6 +174,13 @@
             this.accauntInfo1.Size = new System.Drawing.Size(308, 130);
             this.accauntInfo1.TabIndex = 2;
             // 
+            // deleteAllPasswordsToolStripMenuItem
+            // 
+            this.deleteAllPasswordsToolStripMenuItem.Name = "deleteAllPasswordsToolStripMenuItem";
+            this.deleteAllPasswordsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.deleteAllPasswordsToolStripMenuItem.Text = "Delete all passwords";
+            this.deleteAllPasswordsToolStripMenuItem.Click += new System.EventHandler(this.deleteAllPasswordsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,6 +220,7 @@
         private System.Windows.Forms.ToolStripMenuItem deletePasswordCollectionToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem deleteAllPasswordsToolStripMenuItem;
     }
 }
 

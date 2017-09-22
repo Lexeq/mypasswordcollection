@@ -13,13 +13,7 @@ namespace MyPasswordCollection
 {
     public partial class Form1 : Form
     {
-        //TODO:
-        //Fix cpf hotkeys
-        //Fix wrong old pass behaviour
-        //clear after delete last 
-        private BindingList<PasswordItem> _passwords;
-
-        private PasswordCrypt _crypter;
+        private PasswordCollection _passwords;
 
         private bool UIEnabled
         {
@@ -33,7 +27,7 @@ namespace MyPasswordCollection
             }
         }
 
-        private BindingList<PasswordItem> PasswordList
+        private PasswordCollection PasswordList
         {
             get { return _passwords; }
 
@@ -43,33 +37,19 @@ namespace MyPasswordCollection
                     _passwords.ListChanged -= _passwords_ListChanged;
 
                 _passwords = value;
-
+                accauntInfo1.Item = new PasswordItem();
                 if (_passwords != null)
                 {
-                    listBox1.DataSource = value;
-                    listBox1.DisplayMember = "Site";
-
-                    UIEnabled = true;
                     _passwords.ListChanged += _passwords_ListChanged;
+                    listBox1.DataSource = _passwords;
+                    listBox1.DisplayMember = "Site";
+                    UIEnabled = true;
                 }
                 else
                 {
                     UIEnabled = false;
                 }
-            }
-        }
 
-        private PasswordCrypt Crypter
-        {
-            get
-            {
-                return _crypter;
-            }
-            set
-            {
-                accauntInfo1.Item = new PasswordItem();
-                _crypter = value;
-                PasswordList = _crypter == null ? null : new BindingList<PasswordItem>(value.LoadOrCreate());
             }
         }
 
@@ -83,7 +63,7 @@ namespace MyPasswordCollection
 
         private void accauntInfo1_EditCanceled(object sender, EventArgs e)
         {
-            SetAccInfoEnabled();
+            UpdateAccauntInfoStatus();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -91,7 +71,7 @@ namespace MyPasswordCollection
             var defaultPath = Path.Combine(Application.StartupPath, "passwords.m");
             if (File.Exists(defaultPath))
             {
-                InitCrypter(defaultPath);
+                InitPasswordCollection(defaultPath);
             }
         }
 
@@ -100,7 +80,6 @@ namespace MyPasswordCollection
             var list = (BindingList<PasswordItem>)sender;
             if (list.Count == 0)
                 accauntInfo1.Item = new PasswordItem();
-            Crypter.Save((BindingList<PasswordItem>)sender);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -108,7 +87,7 @@ namespace MyPasswordCollection
             listBox1.SelectedIndex = -1;
             accauntInfo1.EditMode = true;
             accauntInfo1.Item = new PasswordItem();
-            SetAccInfoEnabled();
+            UpdateAccauntInfoStatus();
         }
 
         private void accauntInfo1_EditCompleted(object sender, EventArgs e)
@@ -138,7 +117,7 @@ namespace MyPasswordCollection
             {
                 accauntInfo1.Item = new PasswordItem();
             }
-            SetAccInfoEnabled();
+            UpdateAccauntInfoStatus();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -153,7 +132,7 @@ namespace MyPasswordCollection
             {
                 if (File.Exists(saveFileDialog.FileName))
                     File.Delete(saveFileDialog.FileName);
-                InitCrypter(saveFileDialog.FileName);
+                InitPasswordCollection(saveFileDialog.FileName);
             }
         }
 
@@ -162,23 +141,23 @@ namespace MyPasswordCollection
             openFileDialog.Filter = "MyPasswordCollection files (*.m)|*.m";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                InitCrypter(openFileDialog.FileName);
+                InitPasswordCollection(openFileDialog.FileName);
             }
         }
 
-        private void InitCrypter(string path)
+        private void InitPasswordCollection(string path)
         {
-            using (InputPasswordForm pasform = new InputPasswordForm())
+            using (InputPasswordForm form = new InputPasswordForm(!File.Exists(path)))
             {
                 bool repeatflag = true;
                 while (repeatflag)
                 {
-                    pasform.ShowDialog();
-                    if (pasform.DialogResult == System.Windows.Forms.DialogResult.OK)
+                    form.ShowDialog();
+                    if (form.DialogResult == System.Windows.Forms.DialogResult.OK)
                     {
                         try
                         {
-                            Crypter = new PasswordCrypt(path, pasform.Result);
+                            PasswordList = new PasswordCollection(path, form.Result);
                             repeatflag = false;
                         }
                         catch (Exception ex)
@@ -213,45 +192,25 @@ namespace MyPasswordCollection
             var res = MessageBox.Show("All passwords will be removed.", "Are you sure?", MessageBoxButtons.YesNo);
             if (res == System.Windows.Forms.DialogResult.Yes)
             {
-                File.Delete(Crypter.FilePath);
-                Crypter = null;
+                PasswordList.RaiseListChangedEvents = false;
+                PasswordList.Clear();
+                File.Delete(PasswordList.FilePath);
+                PasswordList = null;
             }
         }
 
-        private void SetAccInfoEnabled()
+        private void UpdateAccauntInfoStatus()
         {
             accauntInfo1.Enabled = listBox1.SelectedIndex >= 0 || accauntInfo1.EditMode;
         }
 
         private void changeMatserPasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (ChangePasswordForm form = new ChangePasswordForm())
+            using (InputPasswordForm form = new InputPasswordForm(true))
             {
                 if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-
-                    var path = Crypter.FilePath;
-                    try
-                    {
-                        PasswordCrypt oldcr = new PasswordCrypt(path, form.OldPassword);
-                        var items = oldcr.LoadOrCreate();
-                        File.Delete(path);
-                        var newcr = new PasswordCrypt(path, form.NewPassword);
-                        newcr.Save(items);
-                    }
-                    catch (CryptographicException)
-                    {
-                        MessageBox.Show("Failed to change password: Check password.");
-                    }
-                    catch (IOException)
-                    {
-                        MessageBox.Show("Failed to change password: File unavaible.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to change password: General exeption", ex.GetType().Name);
-                    }
-
+                    PasswordList.ChangePassword(form.Result);
                 }
             }
         }

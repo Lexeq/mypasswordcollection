@@ -45,14 +45,8 @@ namespace MyPasswordCollection
             }
         }
 
-        public IList<PasswordItem> LoadOrCreate()
+        public PasswordItem[] Load()
         {
-            if (!File.Exists(FilePath))
-            {
-                this.Save(new PasswordItem[0]);
-                return new List<PasswordItem>();
-            }
-
             var ebytes = File.ReadAllBytes(FilePath);
 
             if (BitConverter.ToInt32(TakeRange(ebytes, 0, 4), 0) != HEADER)
@@ -78,13 +72,13 @@ namespace MyPasswordCollection
                 i += pasLen;
             }
 
-            return list;
+            return list.ToArray();
         }
 
-        public void GetKeyAndIVFromPassword(string password, ref byte[] key, ref byte[] iv)
+        private void GetKeyAndIVFromPassword(string password, ref byte[] key, ref byte[] iv)
         {
             Rfc2898DeriveBytes rfc2898DeriveBytes =
-                new Rfc2898DeriveBytes(password, new byte[] { 101, 025, 158, 159, 044, 111, 222, 092 });
+                new Rfc2898DeriveBytes(password, GetSalt(password));
             key = rfc2898DeriveBytes.GetBytes(32);
             iv = rfc2898DeriveBytes.GetBytes(16);
         }
@@ -176,6 +170,24 @@ namespace MyPasswordCollection
             }
 
             return decr;
+        }
+
+        private byte[] GetSalt(string password)
+        {
+            if(string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("password");
+            }
+
+            var salt = new byte[] { 101, 025, 158, 159, 044, 111, 222, 092 };
+            var bytes = Encoding.UTF8.GetBytes(password);
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                salt[i % 8] ^= bytes[i];
+            }
+
+            return salt;
         }
     }
 }

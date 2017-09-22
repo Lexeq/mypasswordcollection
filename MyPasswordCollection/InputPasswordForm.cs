@@ -11,36 +11,38 @@ namespace MyPasswordCollection
 {
     public partial class InputPasswordForm : Form
     {
-        public string Result { get; private set; }
+        private bool confirmation;
 
-        public InputPasswordForm()
+        public string Result { get; set; }
+
+        public InputPasswordForm(bool confirmation)
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.confirmation = confirmation;
+            if (!confirmation)
+            {
+                lblConfirm.Visible = false;
+                tbConfirm.Visible = false;
+                Size = new Size(Size.Width, Size.Height - 20);
+            }
         }
 
         private void cbShowPassword_CheckedChanged(object sender, EventArgs e)
         {
-            tbInput.UseSystemPasswordChar = !cbShowPassword.Checked;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Close();
+            tbNewPassword.UseSystemPasswordChar = !cbShowPassword.Checked;
+            tbConfirm.UseSystemPasswordChar = !cbShowPassword.Checked;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            Result = tbInput.Text;
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
-        }
-
-        private void InputPasswordForm_Shown(object sender, EventArgs e)
-        {
-            tbInput.Focus();
-            tbInput.SelectAll();
+            if (confirmation && tbNewPassword.Text != tbConfirm.Text)
+            {
+                MessageBox.Show("Check new passwords, they must be similar");
+                return;
+            }
+            Result = tbNewPassword.Text;
+            DialogResult = System.Windows.Forms.DialogResult.OK;
+            Close();
         }
 
         private void InputPasswordForm_KeyDown(object sender, KeyEventArgs e)
@@ -48,13 +50,7 @@ namespace MyPasswordCollection
             if (e.KeyCode == Keys.Enter)
                 this.btnOk_Click(this, EventArgs.Empty);
             else if (e.KeyCode == Keys.Escape)
-                this.btnCancel_Click(this, EventArgs.Empty);
-            else if (e.Control == true && e.KeyCode == Keys.A)
-            {
-                tbInput.SelectAll();
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
+                Close();
         }
     }
 }

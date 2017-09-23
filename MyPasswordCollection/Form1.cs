@@ -49,6 +49,7 @@ namespace MyPasswordCollection
                 else
                 {
                     UIEnabled = false;
+                    listBox1.DataSource = null;
                 }
 
             }

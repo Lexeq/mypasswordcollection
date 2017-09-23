@@ -40,7 +40,7 @@ namespace MyPasswordCollection
                 btnSiteToClipboard.Visible = !_editEnabled;
                 btnLoginToClipboard.Visible = !_editEnabled;
                 btnPasswordToClipboard.Visible = !_editEnabled;
-                btnEdit.Visible = !_editEnabled;               
+                btnEdit.Visible = !_editEnabled;
             }
             get
             {

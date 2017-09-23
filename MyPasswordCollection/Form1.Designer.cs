@@ -35,6 +35,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeMatserPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteAllPasswordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletePasswordCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +45,6 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.accauntInfo1 = new MyPasswordCollection.AccauntInfo();
-            this.deleteAllPasswordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,6 +108,13 @@
             this.changeMatserPasswordToolStripMenuItem.Text = "Change matser password...";
             this.changeMatserPasswordToolStripMenuItem.Click += new System.EventHandler(this.changeMatserPasswordToolStripMenuItem_Click);
             // 
+            // deleteAllPasswordsToolStripMenuItem
+            // 
+            this.deleteAllPasswordsToolStripMenuItem.Name = "deleteAllPasswordsToolStripMenuItem";
+            this.deleteAllPasswordsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.deleteAllPasswordsToolStripMenuItem.Text = "Delete all passwords";
+            this.deleteAllPasswordsToolStripMenuItem.Click += new System.EventHandler(this.deleteAllPasswordsToolStripMenuItem_Click);
+            // 
             // deletePasswordCollectionToolStripMenuItem
             // 
             this.deletePasswordCollectionToolStripMenuItem.Name = "deletePasswordCollectionToolStripMenuItem";
@@ -131,8 +138,12 @@
             // 
             // listBox1
             // 
+            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(12, 38);
+            this.listBox1.MinimumSize = new System.Drawing.Size(190, 180);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(198, 186);
             this.listBox1.TabIndex = 1;
@@ -140,6 +151,7 @@
             // 
             // btnAdd
             // 
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAdd.Location = new System.Drawing.Point(21, 230);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
@@ -150,6 +162,7 @@
             // 
             // btnRemove
             // 
+            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRemove.Location = new System.Drawing.Point(123, 230);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
@@ -168,18 +181,12 @@
             // 
             // accauntInfo1
             // 
+            this.accauntInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.accauntInfo1.EditMode = false;
             this.accauntInfo1.Location = new System.Drawing.Point(216, 38);
             this.accauntInfo1.Name = "accauntInfo1";
             this.accauntInfo1.Size = new System.Drawing.Size(308, 130);
             this.accauntInfo1.TabIndex = 2;
-            // 
-            // deleteAllPasswordsToolStripMenuItem
-            // 
-            this.deleteAllPasswordsToolStripMenuItem.Name = "deleteAllPasswordsToolStripMenuItem";
-            this.deleteAllPasswordsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.deleteAllPasswordsToolStripMenuItem.Text = "Delete all passwords";
-            this.deleteAllPasswordsToolStripMenuItem.Click += new System.EventHandler(this.deleteAllPasswordsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -192,6 +199,7 @@
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(540, 300);
             this.Name = "Form1";
             this.Text = "MyPasswordCollection";
             this.Shown += new System.EventHandler(this.Form1_Shown);

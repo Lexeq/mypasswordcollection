@@ -24,6 +24,7 @@ namespace MyPasswordCollection
                 btnRemove.Enabled = value;
                 changeMatserPasswordToolStripMenuItem.Enabled = value;
                 deletePasswordCollectionToolStripMenuItem.Enabled = value;
+                deleteAllPasswordsToolStripMenuItem.Enabled = value;
             }
         }
 
@@ -88,6 +89,7 @@ namespace MyPasswordCollection
             accauntInfo1.EditMode = true;
             accauntInfo1.Item = new PasswordItem();
             UpdateAccauntInfoStatus();
+            accauntInfo1.Focus();
         }
 
         private void accauntInfo1_EditCompleted(object sender, EventArgs e)
@@ -179,7 +181,7 @@ namespace MyPasswordCollection
         {
             if (listBox1.SelectedIndex >= 0)
             {
-                var res = MessageBox.Show("Delete password for " + PasswordList[listBox1.SelectedIndex].Site, "Are you shure?", MessageBoxButtons.YesNo);
+                var res = MessageBox.Show("Delete password for " + PasswordList[listBox1.SelectedIndex].Site, "Are you sure?", MessageBoxButtons.YesNo);
                 if (res == System.Windows.Forms.DialogResult.Yes)
                 {
                     PasswordList.RemoveAt(listBox1.SelectedIndex);

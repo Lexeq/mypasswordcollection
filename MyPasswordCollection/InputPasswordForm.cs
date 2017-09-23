@@ -29,18 +29,18 @@ namespace MyPasswordCollection
 
         private void cbShowPassword_CheckedChanged(object sender, EventArgs e)
         {
-            tbNewPassword.UseSystemPasswordChar = !cbShowPassword.Checked;
+            tbPassword.UseSystemPasswordChar = !cbShowPassword.Checked;
             tbConfirm.UseSystemPasswordChar = !cbShowPassword.Checked;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            if (confirmation && tbNewPassword.Text != tbConfirm.Text)
+            if (confirmation && tbPassword.Text != tbConfirm.Text)
             {
                 MessageBox.Show("Check new passwords, they must be similar");
                 return;
             }
-            Result = tbNewPassword.Text;
+            Result = tbPassword.Text;
             DialogResult = System.Windows.Forms.DialogResult.OK;
             Close();
         }
@@ -51,6 +51,11 @@ namespace MyPasswordCollection
                 this.btnOk_Click(this, EventArgs.Empty);
             else if (e.KeyCode == Keys.Escape)
                 Close();
+        }
+
+        private void InputPasswordForm_Shown(object sender, EventArgs e)
+        {
+            tbPassword.SelectAll();
         }
     }
 }

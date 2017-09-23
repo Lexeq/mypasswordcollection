@@ -85,7 +85,7 @@
             this.btnLoginToClipboard.Location = new System.Drawing.Point(160, 27);
             this.btnLoginToClipboard.Name = "btnLoginToClipboard";
             this.btnLoginToClipboard.Size = new System.Drawing.Size(75, 23);
-            this.btnLoginToClipboard.TabIndex = 3;
+            this.btnLoginToClipboard.TabIndex = 4;
             this.btnLoginToClipboard.Text = "Copy";
             this.btnLoginToClipboard.UseVisualStyleBackColor = true;
             this.btnLoginToClipboard.Click += new System.EventHandler(this.btnLoginToClipboard_Click);
@@ -96,7 +96,7 @@
             this.btnPasswordToClipboard.Location = new System.Drawing.Point(160, 53);
             this.btnPasswordToClipboard.Name = "btnPasswordToClipboard";
             this.btnPasswordToClipboard.Size = new System.Drawing.Size(75, 23);
-            this.btnPasswordToClipboard.TabIndex = 3;
+            this.btnPasswordToClipboard.TabIndex = 5;
             this.btnPasswordToClipboard.Text = "Copy";
             this.btnPasswordToClipboard.UseVisualStyleBackColor = true;
             this.btnPasswordToClipboard.Click += new System.EventHandler(this.btnPasswordToClipboard_Click);
@@ -108,7 +108,7 @@
             this.cbShowPassword.Location = new System.Drawing.Point(55, 81);
             this.cbShowPassword.Name = "cbShowPassword";
             this.cbShowPassword.Size = new System.Drawing.Size(99, 17);
-            this.cbShowPassword.TabIndex = 4;
+            this.cbShowPassword.TabIndex = 9;
             this.cbShowPassword.Text = "show password";
             this.cbShowPassword.UseVisualStyleBackColor = true;
             this.cbShowPassword.CheckedChanged += new System.EventHandler(this.cbShowPassword_CheckedChanged);
@@ -119,7 +119,7 @@
             this.btnEdit.Location = new System.Drawing.Point(160, 104);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnEdit.TabIndex = 5;
+            this.btnEdit.TabIndex = 8;
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -127,7 +127,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(79, 104);
+            this.btnSave.Location = new System.Drawing.Point(3, 104);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 6;
@@ -138,10 +138,10 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCancel.Location = new System.Drawing.Point(3, 104);
+            this.btnCancel.Location = new System.Drawing.Point(79, 104);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);

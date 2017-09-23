@@ -30,7 +30,7 @@
         {
             this.btnOk = new System.Windows.Forms.Button();
             this.lblNewPassword = new System.Windows.Forms.Label();
-            this.tbNewPassword = new System.Windows.Forms.TextBox();
+            this.tbPassword = new System.Windows.Forms.TextBox();
             this.lblConfirm = new System.Windows.Forms.Label();
             this.tbConfirm = new System.Windows.Forms.TextBox();
             this.cbShowPassword = new System.Windows.Forms.CheckBox();
@@ -56,13 +56,13 @@
             this.lblNewPassword.TabIndex = 3;
             this.lblNewPassword.Text = "Password:";
             // 
-            // tbNewPassword
+            // tbPassword
             // 
-            this.tbNewPassword.Location = new System.Drawing.Point(99, 12);
-            this.tbNewPassword.Name = "tbNewPassword";
-            this.tbNewPassword.Size = new System.Drawing.Size(165, 20);
-            this.tbNewPassword.TabIndex = 1;
-            this.tbNewPassword.UseSystemPasswordChar = true;
+            this.tbPassword.Location = new System.Drawing.Point(99, 12);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.Size = new System.Drawing.Size(165, 20);
+            this.tbPassword.TabIndex = 1;
+            this.tbPassword.UseSystemPasswordChar = true;
             // 
             // lblConfirm
             // 
@@ -101,7 +101,7 @@
             this.Controls.Add(this.cbShowPassword);
             this.Controls.Add(this.tbConfirm);
             this.Controls.Add(this.lblConfirm);
-            this.Controls.Add(this.tbNewPassword);
+            this.Controls.Add(this.tbPassword);
             this.Controls.Add(this.lblNewPassword);
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -109,6 +109,7 @@
             this.Name = "InputPasswordForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter password";
+            this.Shown += new System.EventHandler(this.InputPasswordForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.InputPasswordForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -119,7 +120,7 @@
 
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Label lblNewPassword;
-        private System.Windows.Forms.TextBox tbNewPassword;
+        private System.Windows.Forms.TextBox tbPassword;
         private System.Windows.Forms.Label lblConfirm;
         private System.Windows.Forms.TextBox tbConfirm;
         private System.Windows.Forms.CheckBox cbShowPassword;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,6 +136,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.aboutToolStripMenuItem.Text = "About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // listBox1
             // 
@@ -183,6 +185,8 @@
             // 
             this.accauntInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.accauntInfo1.EditMode = false;
+            this.accauntInfo1.Enabled = false;
+            this.accauntInfo1.Item = null;
             this.accauntInfo1.Location = new System.Drawing.Point(216, 38);
             this.accauntInfo1.Name = "accauntInfo1";
             this.accauntInfo1.Size = new System.Drawing.Size(308, 130);
@@ -198,9 +202,12 @@
             this.Controls.Add(this.accauntInfo1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(540, 300);
             this.Name = "Form1";
+            this.ShowIcon = false;
             this.Text = "MyPasswordCollection";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.menuStrip1.ResumeLayout(false);

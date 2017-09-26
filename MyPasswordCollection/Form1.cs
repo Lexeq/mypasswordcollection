@@ -13,13 +13,19 @@ namespace MyPasswordCollection
 {
     public partial class Form1 : Form
     {
+        private const string DEFAULTFILENAME = "passwords.m";
+
         private PasswordCollection _passwords;
+
+        private string DefaultFilePath
+        {
+            get { return Path.Combine(Application.StartupPath, DEFAULTFILENAME); }
+        }
 
         private bool UIEnabled
         {
             set
             {
-                accauntInfo1.Enabled = value;
                 btnAdd.Enabled = value;
                 btnRemove.Enabled = value;
                 changeMatserPasswordToolStripMenuItem.Enabled = value;
@@ -38,12 +44,14 @@ namespace MyPasswordCollection
                     _passwords.ListChanged -= _passwords_ListChanged;
 
                 _passwords = value;
-                accauntInfo1.Item = new PasswordItem();
+                accauntInfo1.Item = null;
+
                 if (_passwords != null)
                 {
                     _passwords.ListChanged += _passwords_ListChanged;
                     listBox1.DataSource = _passwords;
                     listBox1.DisplayMember = "Site";
+                    _passwords.ResetBindings();
                     UIEnabled = true;
                 }
                 else
@@ -59,18 +67,18 @@ namespace MyPasswordCollection
         {
             InitializeComponent();
             UIEnabled = false;
-            accauntInfo1.EditCompleted += new EventHandler(accauntInfo1_EditCompleted);
-            accauntInfo1.EditCanceled += new EventHandler(accauntInfo1_EditCanceled);
+            accauntInfo1.ItemEdited += new EventHandler(accauntInfo1_ItemEdited);
+            accauntInfo1.EditingCanceled += new EventHandler(accauntInfo1_EditingCanceled);
         }
 
-        private void accauntInfo1_EditCanceled(object sender, EventArgs e)
+        void accauntInfo1_EditingCanceled(object sender, EventArgs e)
         {
             UpdateAccauntInfoStatus();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            var defaultPath = Path.Combine(Application.StartupPath, "passwords.m");
+            var defaultPath = DefaultFilePath;
             if (File.Exists(defaultPath))
             {
                 InitPasswordCollection(defaultPath);
@@ -81,25 +89,22 @@ namespace MyPasswordCollection
         {
             var list = (BindingList<PasswordItem>)sender;
             if (list.Count == 0)
-                accauntInfo1.Item = new PasswordItem();
+                accauntInfo1.Item = null;
+            UpdateAccauntInfoStatus();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             listBox1.SelectedIndex = -1;
-            accauntInfo1.EditMode = true;
             accauntInfo1.Item = new PasswordItem();
+            accauntInfo1.EditMode = true;
             UpdateAccauntInfoStatus();
             accauntInfo1.Focus();
         }
 
-        private void accauntInfo1_EditCompleted(object sender, EventArgs e)
+        private void accauntInfo1_ItemEdited(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex >= 0)
-            {
-                PasswordList[listBox1.SelectedIndex] = accauntInfo1.Item;
-            }
-            else
+            if (listBox1.SelectedIndex < 0)
             {
                 PasswordList.Add(accauntInfo1.Item);
                 listBox1.SelectedIndex = PasswordList.Count - 1;
@@ -112,13 +117,8 @@ namespace MyPasswordCollection
             {
                 if (listBox1.SelectedIndex >= 0)
                 {
-                    accauntInfo1.EditMode = false;
                     accauntInfo1.Item = PasswordList[listBox1.SelectedIndex];
                 }
-            }
-            else
-            {
-                accauntInfo1.Item = new PasswordItem();
             }
             UpdateAccauntInfoStatus();
         }
@@ -133,9 +133,7 @@ namespace MyPasswordCollection
             saveFileDialog.Filter = "MyPasswordCollection files (*.m)|*.m";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (File.Exists(saveFileDialog.FileName))
-                    File.Delete(saveFileDialog.FileName);
-                InitPasswordCollection(saveFileDialog.FileName);
+                InitPasswordCollection(saveFileDialog.FileName, true);
             }
         }
 
@@ -148,9 +146,9 @@ namespace MyPasswordCollection
             }
         }
 
-        private void InitPasswordCollection(string path)
+        private void InitPasswordCollection(string path, bool createNew = false)
         {
-            using (InputPasswordForm form = new InputPasswordForm(!File.Exists(path)))
+            using (InputPasswordForm form = new InputPasswordForm(createNew))
             {
                 bool repeatflag = true;
                 while (repeatflag)
@@ -160,6 +158,8 @@ namespace MyPasswordCollection
                     {
                         try
                         {
+                            if(File.Exists(path) && createNew)
+                                File.Delete(saveFileDialog.FileName);
                             PasswordList = new PasswordCollection(path, form.Result);
                             repeatflag = false;
                         }
@@ -197,8 +197,8 @@ namespace MyPasswordCollection
             {
                 PasswordList.RaiseListChangedEvents = false;
                 PasswordList.Clear();
-                File.Delete(PasswordList.FilePath);
                 PasswordList = null;
+                File.Delete(PasswordList.FilePath);
             }
         }
 
@@ -225,6 +225,14 @@ namespace MyPasswordCollection
             {
                 if (PasswordList != null)
                     PasswordList.Clear();
+            }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AboutForm form = new AboutForm())
+            {
+                form.ShowDialog();
             }
         }
     }

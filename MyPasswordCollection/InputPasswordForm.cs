@@ -55,6 +55,7 @@ namespace MyPasswordCollection
 
         private void InputPasswordForm_Shown(object sender, EventArgs e)
         {
+            tbPassword.Focus();
             tbPassword.SelectAll();
         }
     }

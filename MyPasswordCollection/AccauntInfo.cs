@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace MyPasswordCollection
 {
-    public partial class AccauntInfo : UserControl
+    public sealed partial class AccauntInfo : UserControl
     {
         private bool _editEnabled;
 
@@ -21,9 +21,20 @@ namespace MyPasswordCollection
             set
             {
                 _item = value;
-                tbSite.Text = value.Site;
-                tbLogin.Text = value.Login;
-                tbPassword.Text = value.Password;
+                EditMode = false;
+
+                if (_item == null)
+                {
+                    tbSite.Text = string.Empty;
+                    tbLogin.Text = string.Empty;
+                    tbPassword.Text = string.Empty;
+                }
+                else
+                {
+                    tbSite.Text = value.Site;
+                    tbLogin.Text = value.Login;
+                    tbPassword.Text = value.Password;
+                }
             }
         }
 
@@ -48,9 +59,8 @@ namespace MyPasswordCollection
             }
         }
 
-        public event EventHandler EditCompleted;
-
-        public event EventHandler EditCanceled;
+        public event EventHandler ItemEdited;
+        public event EventHandler EditingCanceled;
 
         public AccauntInfo()
         {
@@ -59,6 +69,13 @@ namespace MyPasswordCollection
             tbLogin.Click += tb_Click;
             tbPassword.Click += tb_Click;
             tbSite.Click += tb_Click;
+        }
+
+        private void CancelEditing()
+        {
+            Item = _item;
+            EditMode = false;
+            OnEditingCanceled(EventArgs.Empty);
         }
 
         void tb_Click(object sender, EventArgs e)
@@ -80,17 +97,14 @@ namespace MyPasswordCollection
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            Item = Item;
-            EditMode = false;
-            OnEditCanceled(EventArgs.Empty);
+            CancelEditing();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var item = new PasswordItem(tbSite.Text, tbLogin.Text,tbPassword.Text);
-            Item = item;
+            Item.SetNewValues(tbSite.Text, tbLogin.Text, tbPassword.Text);
             EditMode = false;
-            OnEditComleted(EventArgs.Empty);
+            OnItemEdited(EventArgs.Empty);
         }
 
         private void btnSiteToClipboard_Click(object sender, EventArgs e)
@@ -111,16 +125,16 @@ namespace MyPasswordCollection
                 Clipboard.SetText(tbPassword.Text);
         }
 
-        private void OnEditCanceled(EventArgs e)
+        private void OnItemEdited(EventArgs e)
         {
-            var ev = EditCanceled;
+            var ev = ItemEdited;
             if (ev != null)
                 ev(this, e);
         }
 
-        private void OnEditComleted(EventArgs e)
+        private void OnEditingCanceled(EventArgs e)
         {
-            var ev = EditCompleted;
+            var ev = EditingCanceled;
             if (ev != null)
                 ev(this, e);
         }

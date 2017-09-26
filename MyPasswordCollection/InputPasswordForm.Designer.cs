@@ -106,7 +106,10 @@
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.Name = "InputPasswordForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter password";
             this.Shown += new System.EventHandler(this.InputPasswordForm_Shown);

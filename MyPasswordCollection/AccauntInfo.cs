@@ -78,6 +78,13 @@ namespace MyPasswordCollection
             OnEditingCanceled(EventArgs.Empty);
         }
 
+        private void SaveItem()
+        {
+            Item.SetNewValues(tbSite.Text, tbLogin.Text, tbPassword.Text);
+            EditMode = false;
+            OnItemEdited(EventArgs.Empty);
+        }
+
         void tb_Click(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -102,9 +109,7 @@ namespace MyPasswordCollection
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Item.SetNewValues(tbSite.Text, tbLogin.Text, tbPassword.Text);
-            EditMode = false;
-            OnItemEdited(EventArgs.Empty);
+            SaveItem();
         }
 
         private void btnSiteToClipboard_Click(object sender, EventArgs e)
@@ -137,6 +142,30 @@ namespace MyPasswordCollection
             var ev = EditingCanceled;
             if (ev != null)
                 ev(this, e);
+        }
+
+        private void tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (sender == tbSite || sender == tbLogin)
+                {
+                    this.ProcessTabKey(true);
+                }
+                else
+                {
+                    SaveItem();
+                }
+            }
+            else if (e.KeyChar == (char)Keys.Escape)
+            {
+                CancelEditing();
+            }
+            else
+            {
+                return;
+            }
+            e.Handled = true;
         }
     }
 }

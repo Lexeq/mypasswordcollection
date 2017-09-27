@@ -26,10 +26,5 @@ namespace MyPasswordCollection
         {
             this.Close();
         }
-
-        private void AboutForm_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
     }
 }

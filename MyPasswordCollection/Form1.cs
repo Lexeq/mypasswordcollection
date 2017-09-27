@@ -69,6 +69,8 @@ namespace MyPasswordCollection
             UIEnabled = false;
             accauntInfo1.ItemEdited += new EventHandler(accauntInfo1_ItemEdited);
             accauntInfo1.EditingCanceled += new EventHandler(accauntInfo1_EditingCanceled);
+            openFileDialog.InitialDirectory = Application.StartupPath;
+            saveFileDialog.InitialDirectory = Application.StartupPath;
         }
 
         void accauntInfo1_EditingCanceled(object sender, EventArgs e)
@@ -89,7 +91,10 @@ namespace MyPasswordCollection
         {
             var list = (BindingList<PasswordItem>)sender;
             if (list.Count == 0)
+            {
                 accauntInfo1.Item = null;
+                listBox1.SelectedIndex = -1;
+            }
             UpdateAccauntInfoStatus();
         }
 
@@ -108,6 +113,7 @@ namespace MyPasswordCollection
             {
                 PasswordList.Add(accauntInfo1.Item);
                 listBox1.SelectedIndex = PasswordList.Count - 1;
+                UpdateAccauntInfoStatus();
             }
         }
 
@@ -188,17 +194,19 @@ namespace MyPasswordCollection
                     PasswordList.RemoveAt(listBox1.SelectedIndex);
                 }
             }
+            listBox1_SelectedIndexChanged(this, null);
         }
 
         private void deletePasswordCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var res = MessageBox.Show("All passwords will be removed.", "Are you sure?", MessageBoxButtons.YesNo);
+            var res = MessageBox.Show("All passwords and file will be removed.", "Are you sure?", MessageBoxButtons.YesNo);
             if (res == System.Windows.Forms.DialogResult.Yes)
             {
+                var path = PasswordList.FilePath;
                 PasswordList.RaiseListChangedEvents = false;
                 PasswordList.Clear();
                 PasswordList = null;
-                File.Delete(PasswordList.FilePath);
+                File.Delete(path);
             }
         }
 

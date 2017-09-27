@@ -91,7 +91,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
-            this.Click += new System.EventHandler(this.AboutForm_Click);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AboutForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

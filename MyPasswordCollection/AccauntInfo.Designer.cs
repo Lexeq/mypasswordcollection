@@ -48,6 +48,7 @@
             this.tbSite.Name = "tbSite";
             this.tbSite.Size = new System.Drawing.Size(151, 20);
             this.tbSite.TabIndex = 0;
+            this.tbSite.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // tbLogin
             // 
@@ -57,6 +58,7 @@
             this.tbLogin.Name = "tbLogin";
             this.tbLogin.Size = new System.Drawing.Size(151, 20);
             this.tbLogin.TabIndex = 1;
+            this.tbLogin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // tbPassword
             // 
@@ -67,6 +69,7 @@
             this.tbPassword.Size = new System.Drawing.Size(151, 20);
             this.tbPassword.TabIndex = 2;
             this.tbPassword.UseSystemPasswordChar = true;
+            this.tbPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_KeyPress);
             // 
             // btnSiteToClipboard
             // 

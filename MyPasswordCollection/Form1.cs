@@ -34,6 +34,8 @@ namespace MyPasswordCollection
             }
         }
 
+        private SearchHelper _searcher;
+
         private PasswordCollection PasswordList
         {
             get { return _passwords; }
@@ -48,6 +50,7 @@ namespace MyPasswordCollection
 
                 if (_passwords != null)
                 {
+                    _searcher = new SearchHelper(_passwords);
                     _passwords.ListChanged += _passwords_ListChanged;
                     listBox1.DataSource = _passwords;
                     listBox1.DisplayMember = "Site";
@@ -58,11 +61,12 @@ namespace MyPasswordCollection
                 {
                     UIEnabled = false;
                     listBox1.DataSource = null;
+                    _searcher = null;
                 }
 
             }
         }
-
+        
         public Form1()
         {
             InitializeComponent();
@@ -89,6 +93,7 @@ namespace MyPasswordCollection
 
         private void _passwords_ListChanged(object sender, ListChangedEventArgs e)
         {
+            _searcher.Reset();
             var list = (BindingList<PasswordItem>)sender;
             if (list.Count == 0)
             {
@@ -242,6 +247,21 @@ namespace MyPasswordCollection
             {
                 form.ShowDialog();
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            var i = _searcher.FindNext();
+            if (i >= 0) listBox1.SelectedIndex = i;
+            else _searcher.Reset();
+        }
+
+        private void tbSearch_TextChanged(object sender, EventArgs e)
+        {
+            _searcher.Reset();
+            _searcher.SearchString = tbSearch.Text;
+            var i = _searcher.FindNext();
+            if (i >= 0) listBox1.SelectedIndex = i;
         }
     }
 }

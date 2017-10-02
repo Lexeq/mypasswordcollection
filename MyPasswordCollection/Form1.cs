@@ -32,6 +32,8 @@ namespace MyPasswordCollection
                 changeMatserPasswordToolStripMenuItem.Enabled = value;
                 deletePasswordCollectionToolStripMenuItem.Enabled = value;
                 deleteAllPasswordsToolStripMenuItem.Enabled = value;
+                tbSearch.Visible = value;
+                btnSearch.Visible = value;
             }
         }
 

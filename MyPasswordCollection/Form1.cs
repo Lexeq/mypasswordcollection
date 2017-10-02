@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
+using System.Media;
 
 namespace MyPasswordCollection
 {
@@ -66,7 +67,7 @@ namespace MyPasswordCollection
 
             }
         }
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -130,6 +131,7 @@ namespace MyPasswordCollection
                 {
                     accauntInfo1.Item = PasswordList[listBox1.SelectedIndex];
                 }
+                else accauntInfo1.Item = null;
             }
             UpdateAccauntInfoStatus();
         }
@@ -169,7 +171,7 @@ namespace MyPasswordCollection
                     {
                         try
                         {
-                            if(File.Exists(path) && createNew)
+                            if (File.Exists(path) && createNew)
                                 File.Delete(saveFileDialog.FileName);
                             PasswordList = new PasswordCollection(path, form.Result);
                             repeatflag = false;
@@ -253,7 +255,12 @@ namespace MyPasswordCollection
         {
             var i = _searcher.FindNext();
             if (i >= 0) listBox1.SelectedIndex = i;
-            else _searcher.Reset();
+            else
+            {
+                _searcher.Reset();
+                listBox1.SelectedIndex = -1;
+                SystemSounds.Asterisk.Play();
+            }
         }
 
         private void tbSearch_TextChanged(object sender, EventArgs e)

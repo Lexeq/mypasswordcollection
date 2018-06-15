@@ -57,7 +57,6 @@ namespace MyPasswordCollection
                     _passwords.ListChanged += _passwords_ListChanged;
                     listBox1.DataSource = _passwords;
                     listBox1.DisplayMember = "Site";
-                    _passwords.ResetBindings();
                     UIEnabled = true;
                 }
                 else

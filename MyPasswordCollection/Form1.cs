@@ -17,6 +17,7 @@ namespace MyPasswordCollection
         private const string DEFAULTFILENAME = "passwords.m";
 
         private PasswordCollection _passwords;
+        private SearchHelper _searcher;
 
         private string DefaultFilePath
         {
@@ -36,8 +37,6 @@ namespace MyPasswordCollection
                 btnSearch.Visible = value;
             }
         }
-
-        private SearchHelper _searcher;
 
         private PasswordCollection PasswordList
         {
